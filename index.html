@@ -1,11 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redline Rentals - Vehicle Rental Management System</title>
+  <meta name="description" content="A comprehensive vehicle rental management platform. Browse, filter, rent, and manage premium and everyday vehicles with relational database tracking.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- =====================================================================
+       HEADER / NAVBAR
+       ===================================================================== -->
+  <header class="header">
+    <div class="header-container">
+      <div class="brand-logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="logo-icon">🏎️</div>
+        <span>REDLINE <span class="brand-highlight">RENTALS</span></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#fleetSection" class="nav-link active" id="navFleet">Explore Fleet</a></li>
+          <li>
+            <a href="#myBookings" class="nav-link" id="navMyBookings">
+              My Bookings
+              <span class="nav-badge" id="myBookingsCountBadge" style="display:none;">0</span>
+            </a>
+          </li>
+          <li>
+            <a href="#dbInspector" class="nav-link" id="navDbInspector" style="color:#60a5fa;">
+              🗄️ Relational DB Inspector
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- User Menu (Shown when logged in) -->
+        <div class="user-menu-pill" id="userMenuPill" style="display:none;">
+          <div class="user-avatar-sm" id="userAvatar">A</div>
+          <span class="user-name-text" id="userNameText">Alex Mercer</span>
+          <button class="btn btn-outline btn-sm" id="userLogoutBtn" style="padding:0.2rem 0.6rem; font-size:0.75rem; margin-left:0.35rem;" title="Sign out">Logout</button>
+        </div>
+
+        <!-- Auth Button (Shown when logged out) -->
+        <button class="btn btn-primary btn-sm" id="authBtn">Sign In / Register</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       HERO SECTION
+       ===================================================================== -->
+  <section class="hero">
+    <div class="hero-badge">⚡ Performance & Everyday Fleet</div>
+    <h1>Drive What Thrills You. <span>Rent With Complete Confidence.</span></h1>
+    <p>Choose from sports exotics, electric cruisers, and family SUVs. Transparent daily rates, zero hidden fees, and instant relational booking verification.</p>
+
+    <!-- Quick Search Widget -->
+    <div class="search-bar-wrapper">
+      <div class="search-field">
+        <label>🔍 Search Model / Brand</label>
+        <input type="text" id="heroLocationInput" placeholder="e.g. Porsche, Tesla, BMW, SUV...">
+      </div>
+      <div class="search-field">
+        <label>🏷️ Vehicle Category</label>
+        <select id="heroCategorySelect">
+          <option value="all">All Categories</option>
+          <option value="sports">Sports</option>
+          <option value="luxury">Luxury</option>
+          <option value="suv">SUV</option>
+          <option value="electric">Electric</option>
+          <option value="sedan">Sedan</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>📅 Pickup Date</label>
+        <input type="date" id="heroDateInput">
+      </div>
+      <div class="search-field" style="border-right:none;">
+        <label>📅 Return Date</label>
+        <input type="date" id="heroReturnDateInput">
+      </div>
+      <button class="btn btn-primary btn-lg" id="heroSearchBtn">Find Vehicles</button>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       MAIN VEHICLE FLEET & FILTER SECTION
+       ===================================================================== -->
+  <main class="main-container" id="fleetSection">
     
+    <!-- Category Quick Filters Bar -->
+    <div class="categories-bar">
+      <div class="category-pills" id="categoryPills">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <button class="btn btn-secondary btn-sm" id="filterToggleBtn">
+          ⚙️ Filter & Sort Options
+        </button>
+      </div>
+    </div>
+
+    <!-- Advanced Filter Bar (Collapsible) -->
+    <div class="advanced-filters-panel" id="advancedFiltersPanel" style="display:none;">
+      <div class="filter-group">
+        <label>Live Keyword Search</label>
+        <input type="text" id="searchInput" placeholder="Search by name, fuel, or features...">
+      </div>
+
+      <div class="filter-group">
+        <label>
+          <span>Max Daily Price</span>
+          <span id="priceRangeVal" style="color:var(--primary); font-weight:700;">$350</span>
+        </label>
+        <input type="range" id="filterPriceRange" min="80" max="400" step="10" value="350">
+      </div>
+
+      <div class="filter-group">
+        <label>Transmission</label>
+        <select id="filterTransmission">
+          <option value="all">Any Transmission</option>
+          <option value="automatic">Automatic</option>
+          <option value="manual">Manual</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Fuel Type</label>
+        <select id="filterFuel">
+          <option value="all">Any Fuel Type</option>
+          <option value="petrol">Petrol / Gas</option>
+          <option value="electric">Electric (EV)</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Sort By</label>
+        <select id="sortVehiclesSelect">
+          <option value="featured">Featured & Available First</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Customer Rating</option>
+        </select>
+      </div>
+
+      <div class="filter-group" style="justify-content:center;">
+        <label class="toggle-switch-wrapper">
+          <div class="toggle-switch">
+            <input type="checkbox" id="filterOnlyAvailable">
+            <span class="slider"></span>
+          </div>
+          <span style="font-size:0.85rem; font-weight:600; color:#fff;">Show Available Only</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Results Header -->
+    <div class="section-header">
+      <h2>Available Fleet</h2>
+      <div class="results-count" id="resultsCount">Loading vehicles...</div>
+    </div>
+
+    <!-- Vehicles Grid -->
+    <div class="vehicle-grid" id="vehicleGrid">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Features / Value Prop Banner -->
+    <section style="margin-top:5rem; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:3rem 2rem;">
+      <h3 style="text-align:center; font-size:1.8rem; font-weight:800; margin-bottom:2.5rem;">Why Drivers Choose Redline Rentals</h3>
+      
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:2rem;">
+        <div style="background:var(--bg-surface-elevated); padding:1.75rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+          <div style="font-size:2rem; margin-bottom:0.75rem;">🛡️</div>
+          <h4 style="font-size:1.15rem; color:#fff; margin-bottom:0.5rem;">Relational Integrity</h4>
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.6;">Every booking, customer record, vehicle status, and transaction is tracked with foreign key integrity.</p>
+        </div>
+
+        <div style="background:var(--bg-surface-elevated); padding:1.75rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+          <div style="font-size:2rem; margin-bottom:0.75rem;">⚡</div>
+          <h4 style="font-size:1.15rem; color:#fff; margin-bottom:0.5rem;">Instant Reservation</h4>
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.6;">Real-time availability updates prevent double booking. What you see is guaranteed on the lot.</p>
+        </div>
+
+        <div style="background:var(--bg-surface-elevated); padding:1.75rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+          <div style="font-size:2rem; margin-bottom:0.75rem;">🔄</div>
+          <h4 style="font-size:1.15rem; color:#fff; margin-bottom:0.5rem;">1-Click Cancellation</h4>
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.6;">Plans change? Cancel any confirmed booking directly from your account with automated refund records.</p>
+        </div>
+
+        <div style="background:var(--bg-surface-elevated); padding:1.75rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+          <div style="font-size:2rem; margin-bottom:0.75rem;">🔑</div>
+          <h4 style="font-size:1.15rem; color:#fff; margin-bottom:0.5rem;">Curated Performance</h4>
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.6;">From 1,020 HP Tesla Model S Plaid to the Porsche 911 Carrera S, experience immaculate vehicle condition.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <div class="logo-icon">🏎️</div>
+          <span>REDLINE <span class="brand-highlight">RENTALS</span></span>
+        </div>
+        <p>Premium Vehicle Rental Management System engineered with pure HTML, CSS, and modern JavaScript.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Fleet Types</h4>
+        <ul>
+          <li><a href="#fleetSection">Sports & Exotics</a></li>
+          <li><a href="#fleetSection">Luxury Cruisers</a></li>
+          <li><a href="#fleetSection">Electric Vehicles</a></li>
+          <li><a href="#fleetSection">Family SUVs</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>System Links</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="document.getElementById('navMyBookings').click()">My Bookings Portal</a></li>
+          <li><a href="javascript:void(0)" onclick="document.getElementById('navDbInspector').click()">Relational Database Schema</a></li>
+          <li><a href="schema.sql" download="schema.sql">Download schema.sql</a></li>
+          <li><a href="javascript:void(0)" onclick="document.getElementById('authBtn').click()">Demo Customer Accounts</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Database Tech</h4>
+        <ul>
+          <li><span style="color:var(--text-muted);">Relational Tables: 4</span></li>
+          <li><span style="color:var(--text-muted);">FK Integrity: Enabled</span></li>
+          <li><span style="color:var(--text-muted);">Storage: LocalStorage Engine</span></li>
+          <li><span style="color:var(--text-muted);">SQL Export: Supported</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 Redline Rentals System. All rights reserved.</div>
+      <div style="display:flex; gap:1.5rem;">
+        <span>Privacy Policy</span>
+        <span>Rental Agreement</span>
+        <span>Terms of Service</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       MODAL 1: AUTHENTICATION (LOGIN & REGISTRATION)
+       ===================================================================== -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-box" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>Customer Portal Access</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tabLogin">Sign In</button>
+        <button class="auth-tab-btn" id="tabRegister">Create Account</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Quick 1-Click Demo Login Bar -->
+        <div class="auth-demo-accounts">
+          <p>⚡ Quick Demo Test Accounts (Click to Login):</p>
+          <div class="demo-account-buttons">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnDemoAlex">Alex Mercer</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnDemoSophia">Sophia Ramirez</button>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+          <div class="form-group" style="margin-bottom:1rem;">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" value="alex.mercer@example.com" placeholder="name@example.com" required>
+          </div>
+          <div class="form-group" style="margin-bottom:1.5rem;">
+            <label>Password</label>
+            <input type="password" id="loginPassword" value="password123" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" style="display:none;">
+          <div class="form-group" style="margin-bottom:0.85rem;">
+            <label>Full Legal Name</label>
+            <input type="text" id="regFullName" placeholder="e.g. Marcus Vance" required>
+          </div>
+          <div class="form-group" style="margin-bottom:0.85rem;">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" placeholder="marcus@example.com" required>
+          </div>
+          <div class="form-row" style="margin-bottom:0.85rem;">
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="regPhone" placeholder="+1 (555) 000-0000" required>
+            </div>
+            <div class="form-group">
+              <label>Driver's License #</label>
+              <input type="text" id="regLicense" placeholder="DL-CA-1234567" required>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:1.5rem;">
+            <label>Set Password</label>
+            <input type="password" id="regPassword" placeholder="Minimum 6 characters" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Create Customer Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 2: VEHICLE DETAILS
+       ===================================================================== -->
+  <div class="modal-overlay" id="vehicleDetailsModal">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3>Vehicle Specifications & Overview</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="vehicleDetailsBody">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 3: MULTI-STEP BOOKING WIZARD & PAYMENT
+       ===================================================================== -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal-box modal-xl">
+      <div class="modal-header">
+        <h3>Vehicle Reservation & Rental Agreement</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Progress Steps -->
+        <div class="wizard-steps">
+          <div class="step-indicator active" title="Step 1: Dates & Protection">1</div>
+          <div class="step-indicator" title="Step 2: Driver Details">2</div>
+          <div class="step-indicator" title="Step 3: Payment Checkout">3</div>
+          <div class="step-indicator" title="Step 4: Confirmation">4</div>
+        </div>
+
+        <div id="bookingWizardContent">
+          <!-- Dynamically Injected Wizard Content -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 4: MY BOOKINGS PORTAL
+       ===================================================================== -->
+  <div class="modal-overlay" id="myBookingsModal">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3>My Vehicle Rentals & History</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="bookings-list" id="myBookingsList">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 5: CANCELLATION CONFIRMATION
+       ===================================================================== -->
+  <div class="modal-overlay" id="cancelConfirmModal">
+    <div class="modal-box" style="max-width:480px;">
+      <div class="modal-header">
+        <h3 style="color:var(--danger);">Confirm Booking Cancellation</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="cancelConfirmBody">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="document.getElementById('cancelConfirmModal').classList.remove('active')">Keep Booking</button>
+        <button class="btn btn-danger-outline" id="btnExecuteCancel" style="background:var(--danger); color:#fff;">Confirm Cancellation & Refund</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 6: RELATIONAL DATABASE INSPECTOR & SCHEMA
+       ===================================================================== -->
+  <div class="modal-overlay" id="dbInspectorModal">
+    <div class="modal-box modal-xl">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.3rem;">🗄️</span>
+          <div>
+            <h3 style="line-height:1.2;">Relational Database Inspector</h3>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Live relational view: customers, vehicles, bookings, payments</span>
+          </div>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body" id="dbInspectorContent">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
