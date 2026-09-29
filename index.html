@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redline Rentals - Vehicle Rental Management System</title>
   <meta name="description" content="A comprehensive vehicle rental management platform. Browse, filter, rent, and manage premium and everyday vehicles with relational database tracking.">
-  <!-- Fonts -->
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- =====================================================================
-       HEADER / NAVBAR
-       ===================================================================== -->
+  <!-- NAVBAR -->
+
   <header class="header">
     <div class="header-container">
       <div class="brand-logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
@@ -40,9 +39,8 @@
           </li>
         </ul>
       </nav>
-
       <div class="header-actions">
-        <!-- User Menu (Shown when logged in) -->
+        <!-- User Menu -->
         <div class="user-menu-pill" id="userMenuPill" style="display:none;">
           <div class="user-avatar-sm" id="userAvatar">A</div>
           <span class="user-name-text" id="userNameText">Alex Mercer</span>
@@ -55,9 +53,7 @@
     </div>
   </header>
 
-  <!-- =====================================================================
-       HERO SECTION
-       ===================================================================== -->
+  <!-- HERO SECTION-->
   <section class="hero">
     <div class="hero-badge">⚡ Performance & Everyday Fleet</div>
     <h1>Drive What Thrills You. <span>Rent With Complete Confidence.</span></h1>
@@ -67,7 +63,7 @@
     <div class="search-bar-wrapper">
       <div class="search-field">
         <label>🔍 Search Model / Brand</label>
-        <input type="text" id="heroLocationInput" placeholder="e.g. Porsche, Tesla, BMW, SUV...">
+        <input type="text" id="heroLocationInput" placeholder="e.g. Honda,TATA, Maruti Suzuki ...">
       </div>
       <div class="search-field">
         <label>🏷️ Vehicle Category</label>
@@ -76,7 +72,6 @@
           <option value="sports">Sports</option>
           <option value="luxury">Luxury</option>
           <option value="suv">SUV</option>
-          <option value="electric">Electric</option>
           <option value="sedan">Sedan</option>
         </select>
       </div>
@@ -92,9 +87,7 @@
     </div>
   </section>
 
-  <!-- =====================================================================
-       MAIN VEHICLE FLEET & FILTER SECTION
-       ===================================================================== -->
+  <!--MAIN VEHICLE FLEET & FILTER SECTION-->
   <main class="main-container" id="fleetSection">
     
     <!-- Category Quick Filters Bar -->
@@ -110,7 +103,7 @@
       </div>
     </div>
 
-    <!-- Advanced Filter Bar (Collapsible) -->
+    <!-- Advanced Filter Bar -->
     <div class="advanced-filters-panel" id="advancedFiltersPanel" style="display:none;">
       <div class="filter-group">
         <label>Live Keyword Search</label>
@@ -139,7 +132,6 @@
         <select id="filterFuel">
           <option value="all">Any Fuel Type</option>
           <option value="petrol">Petrol / Gas</option>
-          <option value="electric">Electric (EV)</option>
           <option value="hybrid">Hybrid</option>
         </select>
       </div>
@@ -173,7 +165,6 @@
 
     <!-- Vehicles Grid -->
     <div class="vehicle-grid" id="vehicleGrid">
-      <!-- Injected via JavaScript -->
     </div>
 
     <!-- Features / Value Prop Banner -->
@@ -202,16 +193,14 @@
         <div style="background:var(--bg-surface-elevated); padding:1.75rem; border-radius:var(--radius-md); border:1px solid var(--border);">
           <div style="font-size:2rem; margin-bottom:0.75rem;">🔑</div>
           <h4 style="font-size:1.15rem; color:#fff; margin-bottom:0.5rem;">Curated Performance</h4>
-          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.6;">From 1,020 HP Tesla Model S Plaid to the Porsche 911 Carrera S, experience immaculate vehicle condition.</p>
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.6;">From Alto 800 to BMW X5, experience immaculate vehicle condition.</p>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- =====================================================================
-       FOOTER
-       ===================================================================== -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
@@ -219,7 +208,7 @@
           <div class="logo-icon">🏎️</div>
           <span>REDLINE <span class="brand-highlight">RENTALS</span></span>
         </div>
-        <p>Premium Vehicle Rental Management System engineered with pure HTML, CSS, and modern JavaScript.</p>
+        <p>Premium Vehicle Rental Management System </p>
       </div>
 
       <div class="footer-col">
@@ -227,7 +216,6 @@
         <ul>
           <li><a href="#fleetSection">Sports & Exotics</a></li>
           <li><a href="#fleetSection">Luxury Cruisers</a></li>
-          <li><a href="#fleetSection">Electric Vehicles</a></li>
           <li><a href="#fleetSection">Family SUVs</a></li>
         </ul>
       </div>
@@ -239,16 +227,6 @@
           <li><a href="javascript:void(0)" onclick="document.getElementById('navDbInspector').click()">Relational Database Schema</a></li>
           <li><a href="schema.sql" download="schema.sql">Download schema.sql</a></li>
           <li><a href="javascript:void(0)" onclick="document.getElementById('authBtn').click()">Demo Customer Accounts</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Database Tech</h4>
-        <ul>
-          <li><span style="color:var(--text-muted);">Relational Tables: 4</span></li>
-          <li><span style="color:var(--text-muted);">FK Integrity: Enabled</span></li>
-          <li><span style="color:var(--text-muted);">Storage: LocalStorage Engine</span></li>
-          <li><span style="color:var(--text-muted);">SQL Export: Supported</span></li>
         </ul>
       </div>
     </div>
@@ -263,9 +241,7 @@
     </div>
   </footer>
 
-  <!-- =====================================================================
-       MODAL 1: AUTHENTICATION (LOGIN & REGISTRATION)
-       ===================================================================== -->
+  <!-- (LOGIN & REGISTRATION) -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box" style="max-width:480px;">
       <div class="modal-header">
@@ -279,15 +255,7 @@
       </div>
 
       <div class="modal-body">
-        <!-- Quick 1-Click Demo Login Bar -->
-        <div class="auth-demo-accounts">
-          <p>⚡ Quick Demo Test Accounts (Click to Login):</p>
-          <div class="demo-account-buttons">
-            <button type="button" class="btn btn-secondary btn-sm" id="btnDemoAlex">Alex Mercer</button>
-            <button type="button" class="btn btn-secondary btn-sm" id="btnDemoSophia">Sophia Ramirez</button>
-          </div>
-        </div>
-
+      
         <!-- Login Form -->
         <form id="loginForm">
           <div class="form-group" style="margin-bottom:1rem;">
@@ -305,25 +273,25 @@
         <form id="registerForm" style="display:none;">
           <div class="form-group" style="margin-bottom:0.85rem;">
             <label>Full Legal Name</label>
-            <input type="text" id="regFullName" placeholder="e.g. Marcus Vance" required>
+            <input type="text" id="regFullName" >
           </div>
           <div class="form-group" style="margin-bottom:0.85rem;">
             <label>Email Address</label>
-            <input type="email" id="regEmail" placeholder="marcus@example.com" required>
+            <input type="email" id="regEmail" >
           </div>
           <div class="form-row" style="margin-bottom:0.85rem;">
             <div class="form-group">
               <label>Phone Number</label>
-              <input type="tel" id="regPhone" placeholder="+1 (555) 000-0000" required>
+              <input type="tel" id="regPhone">
             </div>
             <div class="form-group">
               <label>Driver's License #</label>
-              <input type="text" id="regLicense" placeholder="DL-CA-1234567" required>
+              <input type="text" id="regLicense" >
             </div>
           </div>
           <div class="form-group" style="margin-bottom:1.5rem;">
             <label>Set Password</label>
-            <input type="password" id="regPassword" placeholder="Minimum 6 characters" required>
+            <input type="password" id="regPassword" placeholder="Minimum 8 characters" required>
           </div>
           <button type="submit" class="btn btn-primary" style="width:100%;">Create Customer Account</button>
         </form>
@@ -331,9 +299,7 @@
     </div>
   </div>
 
-  <!-- =====================================================================
-       MODAL 2: VEHICLE DETAILS
-       ===================================================================== -->
+  <!-- VEHICLE DETAILS -->
   <div class="modal-overlay" id="vehicleDetailsModal">
     <div class="modal-box modal-lg">
       <div class="modal-header">
@@ -341,14 +307,12 @@
         <button class="modal-close-btn">&times;</button>
       </div>
       <div class="modal-body" id="vehicleDetailsBody">
-        <!-- Injected via JavaScript -->
+       
       </div>
     </div>
   </div>
 
-  <!-- =====================================================================
-       MODAL 3: MULTI-STEP BOOKING WIZARD & PAYMENT
-       ===================================================================== -->
+  <!-- MULTI-STEP BOOKING WIZARD & PAYMENT -->
   <div class="modal-overlay" id="bookingModal">
     <div class="modal-box modal-xl">
       <div class="modal-header">
@@ -366,15 +330,12 @@
         </div>
 
         <div id="bookingWizardContent">
-          <!-- Dynamically Injected Wizard Content -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- =====================================================================
-       MODAL 4: MY BOOKINGS PORTAL
-       ===================================================================== -->
+  <!-- MY BOOKINGS PORTAL -->
   <div class="modal-overlay" id="myBookingsModal">
     <div class="modal-box modal-lg">
       <div class="modal-header">
@@ -384,15 +345,12 @@
 
       <div class="modal-body">
         <div class="bookings-list" id="myBookingsList">
-          <!-- Injected via JavaScript -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- =====================================================================
-       MODAL 5: CANCELLATION CONFIRMATION
-       ===================================================================== -->
+  <!--MODAL 5: CANCELLATION CONFIRMATION-->
   <div class="modal-overlay" id="cancelConfirmModal">
     <div class="modal-box" style="max-width:480px;">
       <div class="modal-header">
@@ -400,7 +358,6 @@
         <button class="modal-close-btn">&times;</button>
       </div>
       <div class="modal-body" id="cancelConfirmBody">
-        <!-- Injected via JavaScript -->
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="document.getElementById('cancelConfirmModal').classList.remove('active')">Keep Booking</button>
@@ -409,9 +366,7 @@
     </div>
   </div>
 
-  <!-- =====================================================================
-       MODAL 6: RELATIONAL DATABASE INSPECTOR & SCHEMA
-       ===================================================================== -->
+  <!--RELATIONAL DATABASE INSPECTOR & SCHEMA-->
   <div class="modal-overlay" id="dbInspectorModal">
     <div class="modal-box modal-xl">
       <div class="modal-header">
@@ -426,15 +381,11 @@
       </div>
 
       <div class="modal-body" id="dbInspectorContent">
-        <!-- Injected via JavaScript -->
+
       </div>
     </div>
   </div>
-
-  <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
-
-  <!-- Application Scripts -->
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

@@ -1257,9 +1257,7 @@ button, input, select, textarea {
   color: #fff;
 }
 
-/* =====================================================================
-   MY BOOKINGS VIEW / TABLE
-   ===================================================================== */
+/* MY BOOKINGS TABLE*/
 .bookings-list {
   display: flex;
   flex-direction: column;
@@ -1491,9 +1489,7 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* =====================================================================
-   AUTH MODAL (LOGIN / REGISTER)
-   ===================================================================== */
+/*(LOGIN / REGISTER)*/
 .auth-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1538,9 +1534,7 @@ button, input, select, textarea {
   flex-wrap: wrap;
 }
 
-/* =====================================================================
-   TOAST NOTIFICATIONS
-   ===================================================================== */
+/* TOAST NOTIFICATIONS */
 .toast-container {
   position: fixed;
   bottom: 24px;
@@ -1582,9 +1576,7 @@ button, input, select, textarea {
   border-left: 4px solid var(--primary);
 }
 
-/* =====================================================================
-   FOOTER
-   ===================================================================== */
+/*FOOTER*/
 .footer {
   background: var(--bg-surface);
   border-top: 1px solid var(--border);
